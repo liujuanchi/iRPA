@@ -4,7 +4,7 @@ import pandas as pd
 
 
 
-def getdailyincrement(date):
+def getdailyincrement(str_to_append):
 
 
     #初始化页面
