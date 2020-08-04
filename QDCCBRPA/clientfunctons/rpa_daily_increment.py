@@ -11,6 +11,8 @@ def getdailyincrement(str_to_append):
     t.init()
     #输入url进入
     t.url("http://bank.jrj.com.cn/bankpro/data.shtml?type=1")
+    #等5秒反应
+    t.wait(5)
     #鼠标放上去，点击精简选项
     t.hover(element_identifier='//*[@id="fxr"]')
     t.click(element_identifier='//*[@id="zksq"]')

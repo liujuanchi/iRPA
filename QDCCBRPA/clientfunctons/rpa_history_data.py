@@ -12,6 +12,8 @@ def gethistorylist (input):
     t.init()
     #输入url进入
     t.url("http://bank.jrj.com.cn/bankpro/data.shtml?type=1")
+    #等5秒网页加载
+    t.wait(5)
     #鼠标放上去，点击精简选项
     t.hover(element_identifier='//*[@id="fxr"]')
     t.click(element_identifier='//*[@id="zksq"]')
@@ -52,7 +54,7 @@ def gethistorylist (input):
         #每页的数据量大小（row number）
         count_values = int(t.count(element_identifier='//tbody[@id = "content"]//tr')) + 1 # python从0开始
         #爬取页面所有一个table里的值
-        filename = str(page_curr)+"history_data.csv"
+        filename = str(input)+str("_")+str(page_curr)+"history_data.csv"
         t.wait(1) #等1秒，万一加载错误了
         t.table(element_identifier='//div[@class = "table-s1 tab-s2 w100"]//table', filename_to_save=filename)
         #爬取当前页面 (只有title和href）
@@ -98,8 +100,8 @@ if __name__ == '__main__':
     merge_1 = pd.read_csv(input_year+'.csv')
     merge_list = [pd.DataFrame() for i in range(max_page)]
     for i in range(max_page):  # 到时候换成page number；
-        merge_list[i] = pd.read_csv(str(i+1) + 'history_data.csv')
-    
+        merge_list[i] = pd.read_csv(str(input_year)+str("_")+str(i+1) + 'history_data.csv')
+
     merged = pd.concat(merge_list, axis=0)
     final = pd.merge(merge_1, merged, on='序号',how = 'inner')
     final.drop_duplicates(inplace=True)

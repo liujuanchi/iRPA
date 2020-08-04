@@ -34,7 +34,7 @@ def getblanklist():
     stop_flag = False # 初始化一个flag，flag = true代表我们需要的数据已经取完了，没必要再翻页了
     while (t.read(element_identifier='//div[@id = "pagefoot"]//a[@class = "cur pf-disabled"]') == str(page_curr)) or (page_curr == 1):
         
-        if max_page == 2: #如果没有空白数据了，就没必要翻页了
+        if stop_flag == True: #如果没有空白数据了，就没必要翻页了
             break
         max_page = page_curr
         #每页的数据量大小（row number）
