@@ -1,7 +1,7 @@
 import tagui as t
 import datetime
 import pandas as pd
-
+import os
 
 
 def getdailyincrement(str_to_append):
@@ -59,6 +59,7 @@ def getdailyincrement(str_to_append):
         count += 1
         t.wait(1)  # 等1秒，万一加载错误了
         t.table(element_identifier='//div[@class = "table-s1 tab-s2 w100"]//table', filename_to_save=filename)
+        count_values = int(t.count(element_identifier='//tbody[@id = "content"]//tr')) + 1 # python从0开始
         for i in range(1,count_values):
             # 判定条件：如果是今天刚发行的，拿到所有主页面上的数据；
             #如果最下面那条数据都大于今天，就直接翻页
@@ -90,15 +91,17 @@ def getdailyincrement(str_to_append):
     today_data.to_csv(str_to_append+".csv",index=False,encoding='UTF-8')
     return count-1
 
-if __name__ == '__main__':
+def main():
     # 获取今天（现在时间）
     today = datetime.datetime.today()
     str_to_append = str(today.date()) #得到需要拿到增量的日期，也就是今天
     max_page = getdailyincrement(str_to_append)
     merge_1 = pd.read_csv(str_to_append+".csv")
+    os.remove(str_to_append+".csv")
     merge_list = [pd.DataFrame() for i in range(max_page)]
     for i in range(max_page):  # 到时候换成page number；
         merge_list[i] = pd.read_csv(str(i + 1) + 'daily_data.csv')
+        os.remove(str(i + 1) + 'daily_data.csv')
 
     merged = pd.concat(merge_list, axis=0)
     final = pd.merge(merge_1, merged, on='序号', how='inner')
@@ -109,3 +112,4 @@ if __name__ == '__main__':
                       'url']])
     final.rename(columns={'综合评级_x': '综合评级'}, inplace=True)
     final.to_csv(str_to_append+"final.csv", encoding='UTF-8', index=False)
+    return str(str_to_append+"final.csv")

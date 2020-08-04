@@ -1,7 +1,7 @@
 import tagui as t
 import datetime
 import pandas as pd
-
+import os
 def gethistorylist (input):
     # 获取xxxx年的数据
     input = str(input)
@@ -94,18 +94,19 @@ def gethistorylist (input):
     hist_data.to_csv(input+".csv",encoding='UTF-8',index=False)
     return max_page
 
-if __name__ == '__main__':
-    input_year = '2020'
+def main(input_year):
     max_page = gethistorylist(input_year)
     merge_1 = pd.read_csv(input_year+'.csv')
+    os.remove(input_year+'.csv')
+    
     merge_list = [pd.DataFrame() for i in range(max_page)]
     for i in range(max_page):  # 到时候换成page number；
         merge_list[i] = pd.read_csv(str(input_year)+str("_")+str(i+1) + 'history_data.csv')
-
+        os.remove(str(input_year)+str("_")+str(i+1) + 'history_data.csv')
     merged = pd.concat(merge_list, axis=0)
     final = pd.merge(merge_1, merged, on='序号',how = 'inner')
     final.drop_duplicates(inplace=True)
     final = pd.DataFrame(final.loc[:,['序号','产品名称','发行银行','委托货币', '发行日', '停售日', '管理期(天)', '预期收益率', '到期收益率', '与同期储蓄比','综合评级_x','url']])
     final.rename(columns={'综合评级_x':'综合评级'},inplace=True)
     final.to_csv(input_year+'final.csv',encoding='UTF-8',index=False)
-
+    return str(input_year+'final.csv')

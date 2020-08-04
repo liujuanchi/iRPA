@@ -1,7 +1,7 @@
 import tagui as t
 import datetime
 import pandas as pd
-
+import os
 
 def getblanklist():
     #初始化页面
@@ -81,12 +81,14 @@ def getblanklist():
     return max_page
 
 
-if __name__ == '__main__':
+def main():
     max_page = getblanklist()
     merge_1 = pd.read_csv('blank_date.csv')
+    os.remove('blank_date.csv')
     merge_list = [pd.DataFrame() for i in range(max_page)]
     for i in range(max_page):  # 到时候换成page number；
         merge_list[i] = pd.read_csv(str(i + 1) + 'blank_date.csv')
+        os.remove(str(i + 1) + 'blank_date.csv')
 
     merged = pd.concat(merge_list, axis=0)
     final = pd.merge(merge_1, merged, on='序号',how = 'inner')
@@ -95,3 +97,4 @@ if __name__ == '__main__':
                                        'url']])
     final.rename(columns={'综合评级_x':'综合评级'},inplace=True)
     final.to_csv('blank_date_final.csv', encoding='UTF-8', index=False)
+    return 'blank_date_final.csv'
