@@ -190,8 +190,8 @@ def history_data_daily(url_prefix):
                                     f.write(text)
                             else:
                                 with open('wrong_log.txt', 'a', encoding='utf-8') as f:
-                                    str = 'page {} doc {} didnt write in '.format(page_num, i)
-                                    f.write(str)
+                                    string = 'page {} doc {} didnt write in '.format(page_num, i)
+                                    f.write(string)
                                 print("write files fails...")
 
     t.close()
@@ -375,8 +375,8 @@ def history_data(url_prefix):
                                     f.write(text)
                             else:
                                 with open('wrong_log.txt', 'a', encoding='utf-8') as f:
-                                    str = 'page {} doc {} didnt write in '.format(page_num, i)
-                                    f.write(str)
+                                    string = 'page {} doc {} didnt write in '.format(page_num, i)
+                                    f.write(string)
                                 print("write files fails...")
 
     t.close()
