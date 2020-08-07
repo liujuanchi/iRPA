@@ -103,8 +103,8 @@ def history_data_daily(url_prefix):
                             f.write(text)
                     else:
                         with open('wrong_log.txt', 'a',encoding = 'utf-8') as f:
-                            str = 'page {} doc {} didnt write in '.format(page_num,i)
-                            f.write(str)
+                            string = 'page {} doc {} didnt write in '.format(page_num,i)
+                            f.write(string)
                         print("write files fails...")
                 else:
                     # 取text
@@ -118,8 +118,8 @@ def history_data_daily(url_prefix):
                             f.write(text)
                     else:
                         with open('wrong_log.txt', 'a',encoding = 'utf-8') as f:
-                            str = 'page {} doc {} didnt write in '.format(page_num,i)
-                            f.write(str)
+                            string = 'page {} doc {} didnt write in '.format(page_num,i)
+                            f.write(string)
                         print("write files fails...")
                     print("文件{} 含有 {} 个文件要下载。".format(i, pdf_count))
                     pdf_count += 1  # python从0开始，所以至少有一个pdf count
@@ -288,8 +288,8 @@ def history_data(url_prefix):
                             f.write(text)
                     else:
                         with open('wrong_log.txt', 'a',encoding = 'utf-8') as f:
-                            str = 'page {} doc {} didnt write in '.format(page_num,i)
-                            f.write(str)
+                            string = 'page {} doc {} didnt write in '.format(page_num,i)
+                            f.write(string)
                         print("write files fails...")
                 else:
                     # 取text
@@ -303,8 +303,8 @@ def history_data(url_prefix):
                             f.write(text)
                     else:
                         with open('wrong_log.txt', 'a',encoding = 'utf-8') as f:
-                            str = 'page {} doc {} didnt write in '.format(page_num,i)
-                            f.write(str)
+                            string = 'page {} doc {} didnt write in '.format(page_num,i)
+                            f.write(string)
                         print("write files fails...")
                     print("文件{} 含有 {} 个文件要下载。".format(i, pdf_count))
                     pdf_count += 1  # python从0开始，所以至少有一个pdf count
