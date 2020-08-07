@@ -94,11 +94,11 @@ def history_data_daily(url_prefix):
                     # 取text
                     if t.read(element_identifier='//div[@id = "zoom"]') != '':
                         text = t.read(element_identifier='//div[@id = "zoom"]')
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     elif t.read(element_identifier='//td[@class = "p1"]') != '':
                         text = t.read(element_identifier='//td[@class = "p1"]')
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     else:
                         print("write files fails...")
@@ -106,11 +106,11 @@ def history_data_daily(url_prefix):
                     # 取text
                     if t.read(element_identifier='//div[@id = "zoom"]') != '':
                         text = t.read(element_identifier='//div[@id = "zoom"]')
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     elif t.read(element_identifier='//td[@class = "p1"]') != '':
                         text = t.read(element_identifier='//td[@class = "p1"]')
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     else:
                         print("write files fails...")
@@ -175,11 +175,11 @@ def history_data_daily(url_prefix):
                             # 取text
                             if t.read(element_identifier='//div[@id = "zoom"]') != '':
                                 text = t.read(element_identifier='//div[@id = "zoom"]')
-                                with open(file_name, 'w') as f:
+                                with open(file_name, 'w',encoding = 'utf-8') as f:
                                     f.write(text)
                             elif t.read(element_identifier='//td[@class = "p1"]') != '':
                                 text = t.read(element_identifier='//td[@class = "p1"]')
-                                with open(file_name, 'w') as f:
+                                with open(file_name, 'w',encoding = 'utf-8') as f:
                                     f.write(text)
                             else:
                                 print("write files fails...")
@@ -266,11 +266,11 @@ def history_data(url_prefix):
                     # 取text
                     if t.read(element_identifier='//div[@id = "zoom"]') != '':
                         text = t.read(element_identifier='//div[@id = "zoom"]')
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     elif t.read(element_identifier='//td[@class = "p1"]') != '':
                         text = t.read(element_identifier='//td[@class = "p1"]')
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     else:
                         print("write files fails...")
@@ -278,11 +278,11 @@ def history_data(url_prefix):
                     # 取text
                     if t.read(element_identifier='//div[@id = "zoom"]') != '':
                         text = t.read(element_identifier='//div[@id = "zoom"]')
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     elif t.read(element_identifier='//td[@class = "p1"]') != '':
                         text = t.read(element_identifier='//td[@class = "p1"]')
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     else:
                         print("write files fails...")
@@ -347,11 +347,11 @@ def history_data(url_prefix):
                             # 取text
                             if t.read(element_identifier='//div[@id = "zoom"]') != '':
                                 text = t.read(element_identifier='//div[@id = "zoom"]')
-                                with open(file_name, 'w') as f:
+                                with open(file_name, 'w',encoding = 'utf-8') as f:
                                     f.write(text)
                             elif t.read(element_identifier='//td[@class = "p1"]') != '':
                                 text = t.read(element_identifier='//td[@class = "p1"]')
-                                with open(file_name, 'w') as f:
+                                with open(file_name, 'w',encoding = 'utf-8') as f:
                                     f.write(text)
                             else:
                                 print("write files fails...")
