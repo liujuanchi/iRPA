@@ -2,6 +2,7 @@ import tagui as t
 import os
 import datetime
 
+MAX_WAIT = 30
 
 def history_data_daily(url_prefix):
     t.init()  #
@@ -11,9 +12,10 @@ def history_data_daily(url_prefix):
     max_page = int(t.read(element_identifier='//td[@class = "Normal"]').split('/')[1]) + 1  # 最大page数量
     for page_num in range(1, max_page):
         t.url(url_prefix + str(page_num) + '.html')
-        t.wait(5)  # 启动很慢
-        print("现在所在页面 {}".format(page_num))
+          # 启动很慢
         t.wait(5)
+        print("现在所在页面 {}".format(page_num))
+
         # 拿到value
         count_values = t.count(element_identifier='//td[@colspan = "2"]//table') + 1
         today = datetime.datetime.today()
@@ -23,10 +25,10 @@ def history_data_daily(url_prefix):
             print("今日无增量")
             break
         print("页面有{}个文件".format(count_values - 1))
-        t.wait(5)
+
         for i in range(1, count_values):
             t.url(url_prefix + str(page_num) + '.html')
-            t.wait(5)  # 启动很慢
+              # 启动很慢
             if t.read(element_identifier='//td[@colspan = "2"]//table['+str(i)+']//span[@class = "hui12"]') < today:
                 t.close()
                 exit(1)
@@ -48,7 +50,7 @@ def history_data_daily(url_prefix):
                     file_name = file_name.split('/')[-1]
 
                     t.url(content_url)
-                    t.wait(5)  # 启动很慢
+                      # 启动很慢
                     wait_seconds = 1
                     total_seconds = 0
                     while os.path.exists(file_name) == False:
@@ -66,7 +68,7 @@ def history_data_daily(url_prefix):
                     suffix = file_name.split('.')[-1]
                     file_name = file_name.split('/')[-1]
                     t.url(content_url)
-                    t.wait(5)  # 启动很慢
+                      # 启动很慢
                     wait_seconds = 1
                     total_seconds = 0
                     while os.path.exists(file_name) == False:
@@ -81,12 +83,11 @@ def history_data_daily(url_prefix):
                 if 'cnhttp' in content_url:
                     content_url = content_url[21:]  # 不知道为什么会出错这个
                     t.url(content_url)
-                    t.wait(5)  # 启动很慢
+                      # 启动很慢
                 else:
                     t.url(content_url)
-                    t.wait(5)  # 启动很慢
+                      # 启动很慢
                 # 获取pdf的数量，pdf的名字和pdf应该有的名字
-                t.wait(2)
                 pdf_count = t.count(element_identifier='//div[@id = "zoom"]//a/@href')
                 if pdf_count == 0:  ##如果是正常的txt文件
                     # 取到列表
@@ -101,6 +102,9 @@ def history_data_daily(url_prefix):
                         with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     else:
+                        with open('wrong_log.txt', 'a',encoding = 'utf-8') as f:
+                            str = 'page {} doc {} didnt write in '.format(page_num,i)
+                            f.write(str)
                         print("write files fails...")
                 else:
                     # 取text
@@ -113,6 +117,9 @@ def history_data_daily(url_prefix):
                         with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     else:
+                        with open('wrong_log.txt', 'a',encoding = 'utf-8') as f:
+                            str = 'page {} doc {} didnt write in '.format(page_num,i)
+                            f.write(str)
                         print("write files fails...")
                     print("文件{} 含有 {} 个文件要下载。".format(i, pdf_count))
                     pdf_count += 1  # python从0开始，所以至少有一个pdf count
@@ -138,10 +145,10 @@ def history_data_daily(url_prefix):
                                     download_link = prefix + t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a/@href')
                                     if 'cnhttp' in download_link:
                                         t.url(t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a/@href'))
-                                        t.wait(5)  # 启动很慢
+                                          # 启动很慢
                                     else:
                                         t.url(download_link)
-                                        t.wait(5)  # 启动很慢
+                                          # 启动很慢
                                     wait_seconds = 1
                                     total_seconds = 0
                                     while os.path.exists(pdf_name) == False:
@@ -154,7 +161,7 @@ def history_data_daily(url_prefix):
                                     os.rename(pdf_name_to_change,
                                               pdf_name_to_change[:-(len(suffix)+1)] + '_' + time + pdf_name_to_change[-(len(suffix)+1):])
                                     t.url(content_url)  # 返回二级目录
-                                    t.wait(5)  # 启动很慢
+                                      # 启动很慢
                                     current_count += 1
                                     break
                                 else:
@@ -168,10 +175,10 @@ def history_data_daily(url_prefix):
                                 element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href')
                             if 'cnhttp' in download_link:
                                 t.url(t.read(element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href'))
-                                t.wait(5)  # 启动很慢
+                                  # 启动很慢
                             else:
                                 t.url(download_link)
-                                t.wait(5)  # 启动很慢
+                                  # 启动很慢
                             # 取text
                             if t.read(element_identifier='//div[@id = "zoom"]') != '':
                                 text = t.read(element_identifier='//div[@id = "zoom"]')
@@ -182,6 +189,9 @@ def history_data_daily(url_prefix):
                                 with open(file_name, 'w',encoding = 'utf-8') as f:
                                     f.write(text)
                             else:
+                                with open('wrong_log.txt', 'a', encoding='utf-8') as f:
+                                    str = 'page {} doc {} didnt write in '.format(page_num, i)
+                                    f.write(str)
                                 print("write files fails...")
 
     t.close()
@@ -201,7 +211,7 @@ def history_data(url_prefix):
         print("页面有{}个文件".format(count_values - 1))
         for i in range(1, count_values):
             t.url(url_prefix + str(page_num) + '.html')
-            t.wait(5)  # 启动很慢
+              # 启动很慢
             file_name = t.read(element_identifier='//td[@colspan = "2"]//table[' + str(i) + ']')
             file_name = file_name[:-10] + str("_") + file_name[-10:] + str('.txt')
             time = file_name[-14:-4]
@@ -220,7 +230,7 @@ def history_data(url_prefix):
                     file_name = file_name.split('/')[-1]
 
                     t.url(content_url)
-                    t.wait(5)  # 启动很慢
+                      # 启动很慢
                     wait_seconds = 1
                     total_seconds = 0
                     while os.path.exists(file_name) == False:
@@ -238,7 +248,7 @@ def history_data(url_prefix):
                     suffix = file_name.split('.')[-1]
                     file_name = file_name.split('/')[-1]
                     t.url(content_url)
-                    t.wait(5)  # 启动很慢
+                      # 启动很慢
                     wait_seconds = 1
                     total_seconds = 0
                     while os.path.exists(file_name) == False:
@@ -253,10 +263,10 @@ def history_data(url_prefix):
                 if 'cnhttp' in content_url:
                     content_url = content_url[21:]  # 不知道为什么会出错这个
                     t.url(content_url)
-                    t.wait(5)  # 启动很慢
+                      # 启动很慢
                 else:
                     t.url(content_url)
-                    t.wait(5)  # 启动很慢
+                      # 启动很慢
                 # 获取pdf的数量，pdf的名字和pdf应该有的名字
                 t.wait(2)
                 pdf_count = t.count(element_identifier='//div[@id = "zoom"]//a/@href')
@@ -266,13 +276,20 @@ def history_data(url_prefix):
                     # 取text
                     if t.read(element_identifier='//div[@id = "zoom"]') != '':
                         text = t.read(element_identifier='//div[@id = "zoom"]')
-                        with open(file_name, 'w',encoding = 'utf-8') as f:
-                            f.write(text)
+                        try:
+                            with open(file_name, 'w',encoding = 'utf-8') as f:
+                                f.write(text)
+                        except:
+                            with open('实施《全国企业兼并破产和职工再就业工作计划》银行呆、坏帐准备金核销办法_1997-10-01.txt', 'w',encoding = 'utf-8') as f:
+                                f.write(text)
                     elif t.read(element_identifier='//td[@class = "p1"]') != '':
                         text = t.read(element_identifier='//td[@class = "p1"]')
                         with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     else:
+                        with open('wrong_log.txt', 'a',encoding = 'utf-8') as f:
+                            str = 'page {} doc {} didnt write in '.format(page_num,i)
+                            f.write(str)
                         print("write files fails...")
                 else:
                     # 取text
@@ -285,6 +302,9 @@ def history_data(url_prefix):
                         with open(file_name, 'w',encoding = 'utf-8') as f:
                             f.write(text)
                     else:
+                        with open('wrong_log.txt', 'a',encoding = 'utf-8') as f:
+                            str = 'page {} doc {} didnt write in '.format(page_num,i)
+                            f.write(str)
                         print("write files fails...")
                     print("文件{} 含有 {} 个文件要下载。".format(i, pdf_count))
                     pdf_count += 1  # python从0开始，所以至少有一个pdf count
@@ -310,10 +330,10 @@ def history_data(url_prefix):
                                     download_link = prefix + t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a/@href')
                                     if 'cnhttp' in download_link:
                                         t.url(t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a/@href'))
-                                        t.wait(5)  # 启动很慢
+                                          # 启动很慢
                                     else:
                                         t.url(download_link)
-                                        t.wait(5)  # 启动很慢
+                                          # 启动很慢
                                     wait_seconds = 1
                                     total_seconds = 0
                                     while os.path.exists(pdf_name) == False:
@@ -326,7 +346,7 @@ def history_data(url_prefix):
                                     os.rename(pdf_name_to_change,
                                               pdf_name_to_change[:-(len(suffix)+1)] + '_' + time + pdf_name_to_change[-(len(suffix)+1):])
                                     t.url(content_url)  # 返回二级目录
-                                    t.wait(5)  # 启动很慢
+                                      # 启动很慢
                                     current_count += 1
                                     break
                                 else:
@@ -340,10 +360,10 @@ def history_data(url_prefix):
                                 element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href')
                             if 'cnhttp' in download_link:
                                 t.url(t.read(element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href'))
-                                t.wait(5)  # 启动很慢
+                                  # 启动很慢
                             else:
                                 t.url(download_link)
-                                t.wait(5)  # 启动很慢
+                                  # 启动很慢
                             # 取text
                             if t.read(element_identifier='//div[@id = "zoom"]') != '':
                                 text = t.read(element_identifier='//div[@id = "zoom"]')
@@ -354,6 +374,9 @@ def history_data(url_prefix):
                                 with open(file_name, 'w',encoding = 'utf-8') as f:
                                     f.write(text)
                             else:
+                                with open('wrong_log.txt', 'a', encoding='utf-8') as f:
+                                    str = 'page {} doc {} didnt write in '.format(page_num, i)
+                                    f.write(str)
                                 print("write files fails...")
 
     t.close()
@@ -392,4 +415,4 @@ print(status)
 other_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144959/21895/index'
 status = history_data(other_url)
 print(status)
-print(remove('/Users/maoyuanq/Desktop/规范性文件'))
+# print(remove('/Users/maoyuanq/Desktop/规范性文件'))
