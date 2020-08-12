@@ -3,7 +3,7 @@ import os
 import datetime
 import sys
 
-MAX_WAIT = 30
+MAX_WAIT = 500
 
 
 
@@ -71,7 +71,7 @@ def direct_download(content_url, time, i):
         while os.path.exists(file_name) == False:
             t.wait(wait_seconds)
             total_seconds += wait_seconds
-            if total_seconds > 30:
+            if total_seconds > MAX_WAIT:
                 print('download fails')
                 break
 
@@ -93,7 +93,7 @@ def direct_download(content_url, time, i):
         while os.path.exists(file_name) == False:
             t.wait(wait_seconds)
             total_seconds += wait_seconds
-            if total_seconds > 30:
+            if total_seconds > MAX_WAIT:
                 print('download fails')
                 break
         os.rename(file_name, file_name[:-(len(suffix) + 1)] + "_" + time + '.' + file_name[-(len(suffix) + 1):])
@@ -155,79 +155,85 @@ def read_text_content(content_url, file_name, page_num, i, time, url_prefix):
         current_count = 0
         for j in range(1, pdf_count):
             # 取pdf的名字
-            if '.htm' not in t.read(element_identifier='//div[@id = "zoom"]//p//a/@href'):
-                print("当前是第{}个文件。。".format(j))
-                p_count = t.count(element_identifier='//div[@id = "zoom"]//p')
-                while current_count <= p_count:
+            try:
+                if '.htm' not in t.read(element_identifier='//div[@id = "zoom"]//p//a/@href'):
+                    print("当前是第{}个文件。。".format(j))
+                    p_count = t.count(element_identifier='//div[@id = "zoom"]//p')
+                    while current_count <= p_count:
 
-                    if t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a') != '':
-                        # 如果取到了
-                        print("这个p有!")
-                        pdf_name = t.read(
-                            element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a/@href')
-                        # 取合规名
-                        pdf_name_to_change = t.read(
-                            element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a')
-                        # 下载
-                        suffix = pdf_name.split('.')[-1]
+                        if t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a') != '':
+                            # 如果取到了
+                            print("这个p有!")
+                            pdf_name = t.read(
+                                element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a/@href')
+                            # 取合规名
+                            pdf_name_to_change = t.read(
+                                element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a')
+                            # 下载
+                            suffix = pdf_name.split('.')[-1]
 
-                        pdf_name = pdf_name.split('/')[-1]
-                        prefix = 'http://www.pbc.gov.cn'
-                        download_link = prefix + t.read(
-                            element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a/@href')
-                        if 'cnhttp' in download_link:
-                            t.url(t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(
-                                current_count) + ']//a/@href'))
+                            pdf_name = pdf_name.split('/')[-1]
+                            prefix = 'http://www.pbc.gov.cn'
+                            download_link = prefix + t.read(
+                                element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a/@href')
+                            if 'cnhttp' in download_link:
+                                t.url(t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(
+                                    current_count) + ']//a/@href'))
+                                # 启动很慢
+                            else:
+                                t.url(download_link)
+                                # 启动很慢
+                            wait_seconds = 1
+                            total_seconds = 0
+                            while os.path.exists(pdf_name) == False:
+                                t.wait(wait_seconds)
+                                total_seconds += wait_seconds
+                                if total_seconds > MAX_WAIT:
+                                    print('download fails')
+                                    break
+                            os.rename(pdf_name, pdf_name_to_change)  # 改名
+                            os.rename(pdf_name_to_change,
+                                      pdf_name_to_change[:-(len(suffix) + 1)] + '_' + time + pdf_name_to_change[
+                                                                                             -(len(suffix) + 1):])
+                            t.url(content_url)  # 返回二级目录
                             # 启动很慢
+                            current_count += 1
+                            break
                         else:
-                            t.url(download_link)
-                            # 启动很慢
-                        wait_seconds = 1
-                        total_seconds = 0
-                        while os.path.exists(pdf_name) == False:
-                            t.wait(wait_seconds)
-                            total_seconds += wait_seconds
-                            if total_seconds > 30:
-                                print('download fails')
-                                break
-                        os.rename(pdf_name, pdf_name_to_change)  # 改名
-                        os.rename(pdf_name_to_change,
-                                  pdf_name_to_change[:-(len(suffix) + 1)] + '_' + time + pdf_name_to_change[
-                                                                                         -(len(suffix) + 1):])
-                        t.url(content_url)  # 返回二级目录
-                        # 启动很慢
-                        current_count += 1
-                        break
-                    else:
-                        current_count += 1
-                        print("这个p没有")
+                            current_count += 1
+                            print("这个p没有")
 
-            else:
-                print("是个网页，当文档处理！")
-                prefix = 'http://www.pbc.gov.cn'
-                download_link = prefix + t.read(
-                    element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href')
-                if 'cnhttp' in download_link:
-                    t.url(t.read(element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href'))
-                    # 启动很慢
                 else:
-                    t.url(download_link)
-                    # 启动很慢
-                # 取text
-                if t.read(element_identifier='//div[@id = "zoom"]') != '':
-                    text = t.read(element_identifier='//div[@id = "zoom"]')
-                    with open(file_name, 'w', encoding='utf-8') as f:
-                        f.write(text)
-                elif t.read(element_identifier='//td[@class = "p1"]') != '':
-                    text = t.read(element_identifier='//td[@class = "p1"]')
-                    with open(file_name, 'w', encoding='utf-8') as f:
-                        f.write(text)
-                else:
-                    with open('wrong_log' + str(url_prefix.split('/')[-2]) + '.txt', 'a', encoding='utf-8') as f:
-                        string = 'page {} doc {} didnt write in '.format(page_num, i)
-                        f.write(string)
-                        f.write("\n")
-                    print("write files fails...")
+                    print("是个网页，当文档处理！")
+                    prefix = 'http://www.pbc.gov.cn'
+                    download_link = prefix + t.read(
+                        element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href')
+                    if 'cnhttp' in download_link:
+                        t.url(t.read(element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href'))
+                        # 启动很慢
+                    else:
+                        t.url(download_link)
+                        # 启动很慢
+                    # 取text
+                    if t.read(element_identifier='//div[@id = "zoom"]') != '':
+                        text = t.read(element_identifier='//div[@id = "zoom"]')
+                        with open(file_name, 'w', encoding='utf-8') as f:
+                            f.write(text)
+                    elif t.read(element_identifier='//td[@class = "p1"]') != '':
+                        text = t.read(element_identifier='//td[@class = "p1"]')
+                        with open(file_name, 'w', encoding='utf-8') as f:
+                            f.write(text)
+                    else:
+                        with open('wrong_log' + str(url_prefix.split('/')[-2]) + '.txt', 'a', encoding='utf-8') as f:
+                            string = 'page {} doc {} didnt write in '.format(page_num, i)
+                            f.write(string)
+                            f.write("\n")
+                        print("write files fails...")
+            except:
+                print("some error, but nevermind, continues..")
+                continue
+
+
 
 
 def history_data(url_prefix, start_page=1):
