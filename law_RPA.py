@@ -238,13 +238,13 @@ def history_data(url_prefix, start_page=1):
         page_file = get_max_page(url_prefix)
         with open(page_file, 'r') as f:
             max_page = int(f.read()) + 1  # 拿到最大page，加1因为python index是开区间；
-            os.remove(page_file)
+        os.remove(page_file)
         for page_num in range(start_page, max_page):
             curr_page = page_num
             count_values_file = get_count_values(page_num, url_prefix)
             with open(count_values_file, 'r') as f:  # 拿到每一页的item数量；
                 count_values = int(f.read().split(':')[-1]) + 1
-                os.remove(count_values_file)
+            os.remove(count_values_file)
             for i in range(1, count_values):
                 if os.path.exists('complete_log'+str(url_prefix.split('/')[-2])+'.txt'):
                     with open('complete_log' + str(url_prefix.split('/')[-2]) + '.txt', 'r') as f:
@@ -284,7 +284,11 @@ def history_data(url_prefix, start_page=1):
 iter_flag = False
 law_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144951/21885/index'
 os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-os.mkdir('law')
+if os.path.exists('C:/Users/Administrator/Desktop/wenjian/law'):
+    os.remove('C:/Users/Administrator/Desktop/wenjian/law')
+    os.mkdir('law')
+else:
+    os.mkdir('law')
 os.chdir('C:/Users/Administrator/Desktop/wenjian/law')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(law_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
@@ -301,7 +305,11 @@ os.remove("complete_log" + str(law_url.split('/')[-2]) + ".txt")
 iter_flag = False
 admin_law = 'http://www.pbc.gov.cn/tiaofasi/144941/144953/21888/index'
 os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-os.mkdir('admin')
+if os.path.exists('C:/Users/Administrator/Desktop/wenjian/admin'):
+    os.remove('C:/Users/Administrator/Desktop/wenjian/admin')
+    os.mkdir('admin')
+else:
+    os.mkdir('admin')
 os.chdir('C:/Users/Administrator/Desktop/wenjian/admin')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(admin_law.split('/')[-2]) + ".txt"):  # 如果是中途断点
@@ -318,7 +326,11 @@ os.remove("complete_log" + str(admin_law.split('/')[-2]) + ".txt")
 iter_flag = False
 compliance_url = 'http://www.pbc.gov.cn/tiaofasi/144941/3581332/3b3662a6/index'
 os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-os.mkdir('compliance')
+if os.path.exists('C:/Users/Administrator/Desktop/wenjian/compliance'):
+    os.remove('C:/Users/Administrator/Desktop/wenjian/compliance')
+    os.mkdir('compliance')
+else:
+    os.mkdir('compliance')
 os.chdir('C:/Users/Administrator/Desktop/wenjian/compliance')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(compliance_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
@@ -335,7 +347,11 @@ os.remove("complete_log" + str(compliance_url.split('/')[-2]) + ".txt")
 iter_flag = False
 regulation_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144957/21892/index'
 os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-os.mkdir('regulation')
+if os.path.exists('C:/Users/Administrator/Desktop/wenjian/regulation'):
+    os.remove('C:/Users/Administrator/Desktop/wenjian/regulation')
+    os.mkdir('regulation')
+else:
+    os.mkdir('regulation')
 os.chdir('C:/Users/Administrator/Desktop/wenjian/regulation')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(regulation_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
@@ -352,7 +368,11 @@ os.remove("complete_log" + str(regulation_url.split('/')[-2]) + ".txt")
 iter_flag = False
 other_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144959/21895/index'
 os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-os.mkdir('others')
+if os.path.exists('C:/Users/Administrator/Desktop/wenjian/others'):
+    os.remove('C:/Users/Administrator/Desktop/wenjian/others')
+    os.mkdir('others')
+else:
+    os.mkdir('others')
 os.chdir('C:/Users/Administrator/Desktop/wenjian/others')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(other_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
