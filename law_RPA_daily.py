@@ -2,8 +2,9 @@ import tagui as t
 import os
 import datetime
 import sys
+import s3_function
 
-MAX_WAIT = 500
+MAX_WAIT = 1000
 
 
 
@@ -161,13 +162,13 @@ def read_text_content(content_url, file_name, page_num, i, time, url_prefix):
         current_count = 0
         for j in range(1, pdf_count):
             # 取pdf的名字
-            try:
-                if '.htm' not in t.read(element_identifier='//div[@id = "zoom"]//p//a/@href'):
-                    print("当前是第{}个文件。。".format(j))
-                    p_count = t.count(element_identifier='//div[@id = "zoom"]//p')
-                    while current_count <= p_count:
-
-                        if t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(current_count) + ']//a') != '':
+            if '.htm' not in t.read(element_identifier='//div[@id = "zoom"]//p//a/@href'):
+                print("当前是第{}个文件。。".format(j))
+                p_count = t.count(element_identifier='//div[@id = "zoom"]//p')
+                while current_count <= p_count:
+                    try:
+                        if t.read(element_identifier='//div[@id = "zoom"]//p[last()-' + str(
+                                current_count) + ']//a') != '':
                             # 如果取到了
                             print("这个p有!")
                             pdf_name = t.read(
@@ -194,13 +195,22 @@ def read_text_content(content_url, file_name, page_num, i, time, url_prefix):
                             while os.path.exists(pdf_name) == False:
                                 t.wait(wait_seconds)
                                 total_seconds += wait_seconds
+                                if os.path.exists(pdf_name_to_change):
+                                    break
                                 if total_seconds > MAX_WAIT:
                                     print('download fails')
+                                    with open('download_log.txt', 'a', encoding='utf-8') as f:
+                                        string = 'page {} doc {} file {} didnt download '.format(page_num, i, j)
+                                        f.write(string)
+                                        f.write("\n")
                                     break
-                            os.rename(pdf_name, pdf_name_to_change)  # 改名
-                            os.rename(pdf_name_to_change,
-                                      pdf_name_to_change[:-(len(suffix) + 1)] + '_' + time + pdf_name_to_change[
-                                                                                             -(len(suffix) + 1):])
+                            if os.path.exists(pdf_name_to_change):
+                                pass
+                            else:
+                                os.rename(pdf_name, pdf_name_to_change)  # 改名
+                                os.rename(pdf_name_to_change,
+                                          pdf_name_to_change[:-(len(suffix) + 1)] + '_' + time + pdf_name_to_change[
+                                                                                                 -(len(suffix) + 1):])
                             t.url(content_url)  # 返回二级目录
                             # 启动很慢
                             current_count += 1
@@ -208,36 +218,36 @@ def read_text_content(content_url, file_name, page_num, i, time, url_prefix):
                         else:
                             current_count += 1
                             print("这个p没有")
+                    except:
+                        print('some error occurs, nvm')
+                        continue
 
+            else:
+                print("是个网页，当文档处理！")
+                prefix = 'http://www.pbc.gov.cn'
+                download_link = prefix + t.read(
+                    element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href')
+                if 'cnhttp' in download_link:
+                    t.url(t.read(element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href'))
+                    # 启动很慢
                 else:
-                    print("是个网页，当文档处理！")
-                    prefix = 'http://www.pbc.gov.cn'
-                    download_link = prefix + t.read(
-                        element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href')
-                    if 'cnhttp' in download_link:
-                        t.url(t.read(element_identifier='//div[@id = "zoom"]//p[' + str(j) + ']//a/@href'))
-                        # 启动很慢
-                    else:
-                        t.url(download_link)
-                        # 启动很慢
-                    # 取text
-                    if t.read(element_identifier='//div[@id = "zoom"]') != '':
-                        text = t.read(element_identifier='//div[@id = "zoom"]')
-                        with open(file_name, 'w', encoding='utf-8') as f:
-                            f.write(text)
-                    elif t.read(element_identifier='//td[@class = "p1"]') != '':
-                        text = t.read(element_identifier='//td[@class = "p1"]')
-                        with open(file_name, 'w', encoding='utf-8') as f:
-                            f.write(text)
-                    else:
-                        with open('wrong_log' + str(url_prefix.split('/')[-2]) + '.txt', 'a', encoding='utf-8') as f:
-                            string = 'page {} doc {} didnt write in '.format(page_num, i)
-                            f.write(string)
-                            f.write("\n")
-                        print("write files fails...")
-            except:
-                print("some errors here but nvm..")
-                continue
+                    t.url(download_link)
+                    # 启动很慢
+                # 取text
+                if t.read(element_identifier='//div[@id = "zoom"]') != '':
+                    text = t.read(element_identifier='//div[@id = "zoom"]')
+                    with open(file_name, 'w', encoding='utf-8') as f:
+                        f.write(text)
+                elif t.read(element_identifier='//td[@class = "p1"]') != '':
+                    text = t.read(element_identifier='//td[@class = "p1"]')
+                    with open(file_name, 'w', encoding='utf-8') as f:
+                        f.write(text)
+                else:
+                    with open('wrong_log.txt', 'a', encoding='utf-8') as f:
+                        string = 'page {} doc {} didnt write in '.format(page_num, i)
+                        f.write(string)
+                        f.write("\n")
+                    print("write files fails...")
 
 
 def history_data_daily(url_prefix, start_page=1):
@@ -296,18 +306,22 @@ def history_data_daily(url_prefix, start_page=1):
 
 
 
-
+## C:/Users/Administrator/Desktop/
+os.chdir('C:/Users/Administrator/Desktop')
+if os.path.exists('C:/Users/Administrator/Desktop/daily'):
+    os.remove('C:/Users/Administrator/Desktop/daily')
+os.mkdir('daily')
 
 #test case 1.
 iter_flag = False
 law_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144951/21885/index'
-os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-if os.path.exists('C:/Users/Administrator/Desktop/wenjian/law'):
-    os.remove('C:/Users/Administrator/Desktop/wenjian/law')
+os.chdir('C:/Users/Administrator/Desktop/daily/')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/law'):
+    os.remove('C:/Users/Administrator/Desktop/daily/law')
     os.mkdir('law')
 else:
     os.mkdir('law')
-os.chdir('C:/Users/Administrator/Desktop/wenjian/law')
+os.chdir('C:/Users/Administrator/Desktop/daily/law')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(law_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(law_url.split('/')[-2]) + ".txt", 'r') as f:
@@ -318,17 +332,23 @@ while iter_flag == False:
         iter_flag = history_data_daily(law_url, 1)
 
 os.remove("complete_log" + str(law_url.split('/')[-2]) + ".txt")
+#压缩文件，上传到云
+os.chdir('C:/Users/Administrator/Desktop/daily')
+s3_function.zip_ya('law')
+#upload
+s3_function.upload_to_aws_s3('law.zip','storageforccbrpa','law_daily.zip')
+
 
 #test case 2.
 iter_flag = False
 admin_law = 'http://www.pbc.gov.cn/tiaofasi/144941/144953/21888/index'
-os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-if os.path.exists('C:/Users/Administrator/Desktop/wenjian/admin'):
-    os.remove('C:/Users/Administrator/Desktop/wenjian/admin')
+os.chdir('C:/Users/Administrator/Desktop/daily')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/admin'):
+    os.remove('C:/Users/Administrator/Desktop/daily/admin')
     os.mkdir('admin')
 else:
     os.mkdir('admin')
-os.chdir('C:/Users/Administrator/Desktop/wenjian/admin')
+os.chdir('C:/Users/Administrator/Desktop/daily/admin')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(admin_law.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(admin_law.split('/')[-2]) + ".txt", 'r') as f:
@@ -339,17 +359,22 @@ while iter_flag == False:
         iter_flag = history_data_daily(admin_law, 1)
 
 os.remove("complete_log" + str(admin_law.split('/')[-2]) + ".txt")
+#压缩文件，上传到云
+os.chdir('C:/Users/Administrator/Desktop/daily')
+s3_function.zip_ya('admin')
+#upload
+s3_function.upload_to_aws_s3('admin.zip','storageforccbrpa','admin_daily.zip')
 
 #test case 3.
 iter_flag = False
 compliance_url = 'http://www.pbc.gov.cn/tiaofasi/144941/3581332/3b3662a6/index'
-os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-if os.path.exists('C:/Users/Administrator/Desktop/wenjian/compliance'):
-    os.remove('C:/Users/Administrator/Desktop/wenjian/compliance')
+os.chdir('C:/Users/Administrator/Desktop/daily/')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/compliance'):
+    os.remove('C:/Users/Administrator/Desktop/daily/compliance')
     os.mkdir('compliance')
 else:
     os.mkdir('compliance')
-os.chdir('C:/Users/Administrator/Desktop/wenjian/compliance')
+os.chdir('C:/Users/Administrator/Desktop/daily/compliance')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(compliance_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(compliance_url.split('/')[-2]) + ".txt", 'r') as f:
@@ -360,17 +385,22 @@ while iter_flag == False:
         iter_flag = history_data_daily(compliance_url, 1)
 
 os.remove("complete_log" + str(compliance_url.split('/')[-2]) + ".txt")
+#压缩文件，上传到云
+os.chdir('C:/Users/Administrator/Desktopp/daily')
+s3_function.zip_ya('compliance')
+#upload
+s3_function.upload_to_aws_s3('compliance.zip','storageforccbrpa','compliance_daily.zip')
 
 #test case 4.
 iter_flag = False
 regulation_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144957/21892/index'
-os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-if os.path.exists('C:/Users/Administrator/Desktop/wenjian/regulation'):
-    os.remove('C:/Users/Administrator/Desktop/wenjian/regulation')
+os.chdir('C:/Users/Administrator/Desktop/daily/')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/regulation'):
+    os.remove('C:/Users/Administrator/Desktop/daily/regulation')
     os.mkdir('regulation')
 else:
     os.mkdir('regulation')
-os.chdir('C:/Users/Administrator/Desktop/wenjian/regulation')
+os.chdir('C:/Users/Administrator/Desktop/daily/regulation')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(regulation_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(regulation_url.split('/')[-2]) + ".txt", 'r') as f:
@@ -381,17 +411,23 @@ while iter_flag == False:
         iter_flag = history_data_daily(regulation_url, 1)
 
 os.remove("complete_log" + str(regulation_url.split('/')[-2]) + ".txt")
+#压缩文件，上传到云
+os.chdir('C:/Users/Administrator/Desktop/daily')
+s3_function.zip_ya('regulation')
+#upload
+s3_function.upload_to_aws_s3('regulation.zip','storageforccbrpa','regulation_daily.zip')
+
 
 #test case 5.
 iter_flag = False
 other_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144959/21895/index'
-os.chdir('C:/Users/Administrator/Desktop/wenjian/')
-if os.path.exists('C:/Users/Administrator/Desktop/wenjian/others'):
-    os.remove('C:/Users/Administrator/Desktop/wenjian/others')
+os.chdir('C:/Users/Administrator/Desktop/daily/')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/others'):
+    os.remove('C:/Users/Administrator/Desktop/daily/others')
     os.mkdir('others')
 else:
     os.mkdir('others')
-os.chdir('C:/Users/Administrator/Desktop/wenjian/others')
+os.chdir('C:/Users/Administrator/Desktop/daily/others')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(other_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(other_url.split('/')[-2]) + ".txt", 'r') as f:
@@ -402,7 +438,11 @@ while iter_flag == False:
         iter_flag = history_data_daily(other_url, 1)
 
 os.remove("complete_log" + str(other_url.split('/')[-2]) + ".txt")
-
+#压缩文件，上传到云
+os.chdir('C:/Users/Administrator/Desktop/daily')
+s3_function.zip_ya('others')
+#upload
+s3_function.upload_to_aws_s3('others.zip','storageforccbrpa','others_daily.zip')
 
 
 # print(remove('/Users/maoyuanq/Desktop/规范性文件'))
