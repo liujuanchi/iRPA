@@ -17,7 +17,7 @@ def main_operation(url, mode = 'txt'):
     list_count = t.count(element_identifier='//div[@class = "list caidan-right-list"]')  # 循环列表，取出总list有几个
     #如果是断点，读取断电数据
     if os.path.exists('baojianhui_log.txt'):
-        with open('baojianhui_log.txt','r') as f:
+        with open('baojianhui_log.txt','r',encoding='utf-8') as f:
             params = f.read().split(',')
         curr_page = params[0]
         start_i = params[1]
@@ -58,22 +58,22 @@ def main_operation(url, mode = 'txt'):
                     type_3 = t.read(element_identifier='//div[@class = "wenzhang-content ng-binding"]')
                     if type_1 != '':
                         content = type_1
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding='utf-8') as f:
                             f.write(content)
                         break
                     elif type_2 != '':
                         content = type_2
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding='utf-8') as f:
                             f.write(content)
                         break
                     elif type_3 != '':
                         content = type_3
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding='utf-8') as f:
                             f.write(content)
                         break
                     else:
                         content = ' '
-                        with open(file_name, 'w') as f:
+                        with open(file_name, 'w',encoding='utf-8') as f:
                             f.write(content)
                         break
             elif mode == 'doc':
@@ -113,15 +113,15 @@ def main_operation(url, mode = 'txt'):
                 url + str(
                     curr_page))
             t.wait(2)
-            with open('baojianhui_log.txt','w') as f:
+            with open('baojianhui_log.txt','w',encoding='utf-8') as f:
                 f.write(str(curr_page) + ',' + str(i) + ',' + str(j))
-        with open('baojianhui_log.txt','w') as f:
+        with open('baojianhui_log.txt','w',encoding='utf-8') as f:
             f.write(str(curr_page) + ',' + str(i) + ',' + str(1)) #当前list取完，j更新
     #循环完之后，翻页
 
 def main(url, mode = 'txt'):
     if os.path.exists('baojianhui_log.txt'):
-        with open('baojianhui_log.txt', 'r') as f:
+        with open('baojianhui_log.txt', 'r',encoding='utf-8') as f:
             params = f.read().split(',')
         curr_page = params[0]
     else:  # 如果是第一次执行，全取初始值；
@@ -135,7 +135,7 @@ def main(url, mode = 'txt'):
         t.click(element_identifier='//a[@ng-click = "pager.next()"]') #翻页
         t.wait(5)
         curr_page = int(t.read(element_identifier='//div[@class = "ng-binding"][last()]').split('/')[0])
-        with open('baojianhui_log.txt', 'w') as f:
+        with open('baojianhui_log.txt', 'w',encoding='utf-8') as f:
             f.write(str(curr_page) + ',' + str(1) + ',' + str(1)) #翻页之后，index重置；i更新；
     if curr_page == total_page:
         main_operation(url, mode) #如果是最后一页了，只需要做一次main
@@ -145,7 +145,7 @@ def main(url, mode = 'txt'):
 
 'C:/Users/Administrator/Desktop/wenjian'
 os.chdir('C:/Users/Administrator/Desktop')
-os.mkdir('baojian_guizhang')
+os.mkdir('../../Desktop/baojian_guizhang')
 os.chdir('C:/Users/Administrator/Desktop/baojian_guizhang')
 guizhang_flag = False
 guizhang_url = 'http://www.cbirc.gov.cn/cn/view/pages/ItemList.html?itemPId=923&itemId=928&itemUrl=ItemListRightList.html&itemName=规章及规范性文件&itemsubPId=926#'
