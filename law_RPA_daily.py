@@ -313,6 +313,8 @@ if os.path.exists('/Users/maoyuanq/Desktop/daily'):
     # os.remove('C:/Users/Administrator/Desktop/daily')
     shutil.rmtree('/Users/maoyuanq/Desktop/daily')
 os.mkdir('daily')
+today = datetime.datetime.today()
+today = str(today.date())
 
 #test case 1.
 iter_flag = False
@@ -341,7 +343,7 @@ else:
     os.chdir('/Users/maoyuanq/Desktop/daily')
     s3_function.zip_ya('law')
     #upload
-    s3_function.upload_to_aws_s3('law.zip','storageforccbrpa','law_daily.zip')
+    s3_function.upload_to_aws_s3('law.zip','storageforccbrpa','law_daily'+today+'.zip')
 
 
 
@@ -371,7 +373,7 @@ else:
     os.chdir('/Users/maoyuanq/Desktop/daily')
     s3_function.zip_ya('admin')
     #upload
-    s3_function.upload_to_aws_s3('admin.zip','storageforccbrpa','admin_daily.zip')
+    s3_function.upload_to_aws_s3('admin.zip','storageforccbrpa','admin_daily'+today+'.zip')
 
 #test case 3.
 iter_flag = False
@@ -399,7 +401,7 @@ else:
     os.chdir('/Users/maoyuanq/Desktop/daily')
     s3_function.zip_ya('compliance')
     #upload
-    s3_function.upload_to_aws_s3('compliance.zip','storageforccbrpa','compliance_daily.zip')
+    s3_function.upload_to_aws_s3('compliance.zip','storageforccbrpa','compliance_daily'+today+'.zip')
 
 #test case 4.
 iter_flag = False
@@ -427,7 +429,7 @@ else:
     os.chdir('/Users/maoyuanq/Desktop/daily')
     s3_function.zip_ya('regulation')
     #upload
-    s3_function.upload_to_aws_s3('regulation.zip','storageforccbrpa','regulation_daily.zip')
+    s3_function.upload_to_aws_s3('regulation.zip','storageforccbrpa','regulation_daily'+today+'.zip')
 
 
 #test case 5.
@@ -456,7 +458,7 @@ else:
     os.chdir('/Users/maoyuanq/Desktop/daily')
     s3_function.zip_ya('others')
     #upload
-    s3_function.upload_to_aws_s3('others.zip','storageforccbrpa','others_daily.zip')
+    s3_function.upload_to_aws_s3('others.zip','storageforccbrpa','others_daily'+today+'.zip')
 
 
 # print(remove('/Users/maoyuanq/Desktop/规范性文件'))
