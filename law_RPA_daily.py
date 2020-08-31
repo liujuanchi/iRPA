@@ -309,7 +309,8 @@ def history_data_daily(url_prefix, start_page=1):
 ## C:/Users/Administrator/Desktop/
 os.chdir('C:/Users/Administrator/Desktop')
 if os.path.exists('C:/Users/Administrator/Desktop/daily'):
-    os.remove('C:/Users/Administrator/Desktop/daily')
+    # os.remove('C:/Users/Administrator/Desktop/daily')
+    os.removedirs('C:/Users/Administrator/Desktop/daily')
 os.mkdir('daily')
 
 #test case 1.
@@ -317,7 +318,7 @@ iter_flag = False
 law_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144951/21885/index'
 os.chdir('C:/Users/Administrator/Desktop/daily/')
 if os.path.exists('C:/Users/Administrator/Desktop/daily/law'):
-    os.remove('C:/Users/Administrator/Desktop/daily/law')
+    os.removedirs('C:/Users/Administrator/Desktop/daily/law')
     os.mkdir('law')
 else:
     os.mkdir('law')
@@ -344,7 +345,7 @@ iter_flag = False
 admin_law = 'http://www.pbc.gov.cn/tiaofasi/144941/144953/21888/index'
 os.chdir('C:/Users/Administrator/Desktop/daily')
 if os.path.exists('C:/Users/Administrator/Desktop/daily/admin'):
-    os.remove('C:/Users/Administrator/Desktop/daily/admin')
+    os.removedirs('C:/Users/Administrator/Desktop/daily/admin')
     os.mkdir('admin')
 else:
     os.mkdir('admin')
@@ -370,7 +371,7 @@ iter_flag = False
 compliance_url = 'http://www.pbc.gov.cn/tiaofasi/144941/3581332/3b3662a6/index'
 os.chdir('C:/Users/Administrator/Desktop/daily/')
 if os.path.exists('C:/Users/Administrator/Desktop/daily/compliance'):
-    os.remove('C:/Users/Administrator/Desktop/daily/compliance')
+    os.removedirs('C:/Users/Administrator/Desktop/daily/compliance')
     os.mkdir('compliance')
 else:
     os.mkdir('compliance')
@@ -386,7 +387,7 @@ while iter_flag == False:
 
 os.remove("complete_log" + str(compliance_url.split('/')[-2]) + ".txt")
 #压缩文件，上传到云
-os.chdir('C:/Users/Administrator/Desktopp/daily')
+os.chdir('C:/Users/Administrator/Desktop/daily')
 s3_function.zip_ya('compliance')
 #upload
 s3_function.upload_to_aws_s3('compliance.zip','storageforccbrpa','compliance_daily.zip')
@@ -396,7 +397,7 @@ iter_flag = False
 regulation_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144957/21892/index'
 os.chdir('C:/Users/Administrator/Desktop/daily/')
 if os.path.exists('C:/Users/Administrator/Desktop/daily/regulation'):
-    os.remove('C:/Users/Administrator/Desktop/daily/regulation')
+    os.removedirs('C:/Users/Administrator/Desktop/daily/regulation')
     os.mkdir('regulation')
 else:
     os.mkdir('regulation')
@@ -423,7 +424,7 @@ iter_flag = False
 other_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144959/21895/index'
 os.chdir('C:/Users/Administrator/Desktop/daily/')
 if os.path.exists('C:/Users/Administrator/Desktop/daily/others'):
-    os.remove('C:/Users/Administrator/Desktop/daily/others')
+    os.removedirs('C:/Users/Administrator/Desktop/daily/others')
     os.mkdir('others')
 else:
     os.mkdir('others')
