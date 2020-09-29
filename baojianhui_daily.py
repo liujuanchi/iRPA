@@ -198,11 +198,11 @@ def search(path):
     else:
         return False
 
-os.chdir('/Users/maoyuanq/Desktop')
-if os.path.exists('/Users/maoyuanq/Desktop/baojian_guizhang'):
-    shutil.rmtree('/Users/maoyuanq/Desktop/baojian_guizhang')
+os.chdir('C:/Users/Administrator/Desktop')
+if os.path.exists('C:/Users/Administrator/Desktop/baojian_guizhang'):
+    shutil.rmtree('C:/Users/Administrator/Desktop/baojian_guizhang')
 os.mkdir('baojian_guizhang')
-os.chdir('/Users/maoyuanq/Desktop/baojian_guizhang')
+os.chdir('C:/Users/Administrator/Desktop/baojian_guizhang')
 guizhang_flag = False
 guizhang_url = 'http://www.cbirc.gov.cn/cn/view/pages/ItemList.html?itemPId=923&itemId=928&itemUrl=ItemListRightList.html&itemName=规章及规范性文件&itemsubPId=926#'
 if os.path.exists('baojianhui_log.txt'):
@@ -218,20 +218,20 @@ while not guizhang_flag:
         t.close()
 if os.path.exists('baojianhui_log.txt'):
     os.remove('baojianhui_log.txt') #运行成功之后删除log
-os.chdir('/Users/maoyuanq/Desktop')
-if search('/Users/maoyuanq/Desktop/baojian_guizhang'):
+os.chdir('C:/Users/Administrator/Desktop')
+if search('C:/Users/Administrator/Desktop/baojian_guizhang'):
     s3_function.zip_ya('baojian_guizhang')
-    s3_function.upload_to_aws_s3('baojian_guizhang.zip','storageforccbrpa','baojian_guizhang_history'+str((datetime.datetime.today()).date())+'.zip')
+    s3_function.upload_to_aws_s3('baojian_guizhang.zip','s3qingdao','baojian_guizhang_history'+str((datetime.datetime.today()).date())+'.zip')
     os.remove('baojian_guizhang.zip')
 else:
     print('文件夹空的')
 
 
-os.chdir('/Users/maoyuanq/Desktop')
-if os.path.exists('/Users/maoyuanq/Desktop/baojian_falv'):
-    shutil.rmtree('/Users/maoyuanq/Desktop/baojian_falv')
+os.chdir('C:/Users/Administrator/Desktop')
+if os.path.exists('C:/Users/Administrator/Desktop/baojian_falv'):
+    shutil.rmtree('C:/Users/Administrator/Desktop/baojian_falv')
 os.mkdir('baojian_falv')
-os.chdir('/Users/maoyuanq/Desktop/baojian_falv')
+os.chdir('C:/Users/Administrator/Desktop/baojian_falv')
 falv_flag = False
 falv_url = 'http://www.cbirc.gov.cn/cn/view/pages/ItemList.html?itemPId=923&itemId=927&itemUrl=ItemListRightList.html&itemName=法律法规&itemsubPId=926#'
 if os.path.exists('baojianhui_log.txt'):
@@ -247,10 +247,10 @@ while not falv_flag:
         t.close()
 if os.path.exists('baojianhui_log.txt'):
     os.remove('baojianhui_log.txt') #运行成功之后删除log
-os.chdir('/Users/maoyuanq/Desktop')
-if search('/Users/maoyuanq/Desktop/baojian_falv'):
+os.chdir('C:/Users/Administrator/Desktop')
+if search('C:/Users/Administrator/Desktop/baojian_falv'):
     s3_function.zip_ya('baojian_falv')
-    s3_function.upload_to_aws_s3('baojian_falv.zip','storageforccbrpa','baojian_falv_history'+str((datetime.datetime.today()).date())+'.zip')
+    s3_function.upload_to_aws_s3('baojian_falv.zip','s3qingdao','baojian_falv_history'+str((datetime.datetime.today()).date())+'.zip')
     os.remove('baojian_falv.zip')
 else:
     print('文件夹空的')

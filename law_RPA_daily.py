@@ -258,6 +258,7 @@ def history_data_daily(url_prefix, start_page=1):
     today = str(today.date())
     try:
         t.init()
+        t.wait(5)
         page_file = get_max_page(url_prefix)
         with open(page_file, 'r') as f:
             max_page = int(f.read()) + 1  # 拿到最大page，加1因为python index是开区间；
@@ -308,10 +309,10 @@ def history_data_daily(url_prefix, start_page=1):
 
 #/Users/maoyuanq/Desktop/
 ## C:/Users/Administrator/Desktop/
-os.chdir('/Users/maoyuanq/Desktop')
-if os.path.exists('/Users/maoyuanq/Desktop/daily'):
+os.chdir('C:/Users/Administrator/Desktop')
+if os.path.exists('C:/Users/Administrator/Desktop/daily'):
     # os.remove('C:/Users/Administrator/Desktop/daily')
-    shutil.rmtree('/Users/maoyuanq/Desktop/daily')
+    shutil.rmtree('C:/Users/Administrator/Desktop/daily')
 os.mkdir('daily')
 today = datetime.datetime.today()
 today = str(today.date())
@@ -319,13 +320,13 @@ today = str(today.date())
 #test case 1.
 iter_flag = False
 law_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144951/21885/index'
-os.chdir('/Users/maoyuanq/Desktop/daily/')
-if os.path.exists('/Users/maoyuanq/Desktop/daily/law'):
-    shutil.rmtree('/Users/maoyuanq/Desktop/daily/law')
+os.chdir('C:/Users/Administrator/Desktop/daily/')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/law'):
+    shutil.rmtree('C:/Users/Administrator/Desktop/daily/law')
     os.mkdir('law')
 else:
     os.mkdir('law')
-os.chdir('/Users/maoyuanq/Desktop/daily/law')
+os.chdir('C:/Users/Administrator/Desktop/daily/law')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(law_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(law_url.split('/')[-2]) + ".txt", 'r') as f:
@@ -340,23 +341,23 @@ if message == '今日无增量':
 else:
     os.remove("complete_log" + str(law_url.split('/')[-2]) + ".txt")
     #压缩文件，上传到云
-    os.chdir('/Users/maoyuanq/Desktop/daily')
+    os.chdir('C:/Users/Administrator/Desktop/daily')
     s3_function.zip_ya('law')
     #upload
-    s3_function.upload_to_aws_s3('law.zip','storageforccbrpa','law_daily'+today+'.zip')
+    s3_function.upload_to_aws_s3('law.zip','s3qingdao','law_daily'+today+'.zip')
 
 
 
 #test case 2.
 iter_flag = False
 admin_law = 'http://www.pbc.gov.cn/tiaofasi/144941/144953/21888/index'
-os.chdir('/Users/maoyuanq/Desktop/daily')
-if os.path.exists('/Users/maoyuanq/Desktop/daily/admin'):
-    shutil.rmtree('/Users/maoyuanq/Desktop/daily/admin')
+os.chdir('C:/Users/Administrator/Desktop/daily')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/admin'):
+    shutil.rmtree('C:/Users/Administrator/Desktop/daily/admin')
     os.mkdir('admin')
 else:
     os.mkdir('admin')
-os.chdir('/Users/maoyuanq/Desktop/daily/admin')
+os.chdir('C:/Users/Administrator/Desktop/daily/admin')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(admin_law.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(admin_law.split('/')[-2]) + ".txt", 'r') as f:
@@ -370,21 +371,21 @@ if message == '今日无增量':
 else:
     os.remove("complete_log" + str(admin_law.split('/')[-2]) + ".txt")
     #压缩文件，上传到云
-    os.chdir('/Users/maoyuanq/Desktop/daily')
+    os.chdir('C:/Users/Administrator/Desktop/daily')
     s3_function.zip_ya('admin')
     #upload
-    s3_function.upload_to_aws_s3('admin.zip','storageforccbrpa','admin_daily'+today+'.zip')
+    s3_function.upload_to_aws_s3('admin.zip','s3qingdaos','admin_daily'+today+'.zip')
 
 #test case 3.
 iter_flag = False
 compliance_url = 'http://www.pbc.gov.cn/tiaofasi/144941/3581332/3b3662a6/index'
-os.chdir('/Users/maoyuanq/Desktop/daily/')
-if os.path.exists('/Users/maoyuanq/Desktop/daily/compliance'):
-    shutil.rmtree('/Users/maoyuanq/Desktop/daily/compliance')
+os.chdir('C:/Users/Administrator/Desktop/daily/')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/compliance'):
+    shutil.rmtree('C:/Users/Administrator/Desktop/daily/compliance')
     os.mkdir('compliance')
 else:
     os.mkdir('compliance')
-os.chdir('/Users/maoyuanq/Desktop/daily/compliance')
+os.chdir('C:/Users/Administrator/Desktop/daily/compliance')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(compliance_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(compliance_url.split('/')[-2]) + ".txt", 'r') as f:
@@ -398,21 +399,21 @@ if message == '今日无增量':
 else:
     os.remove("complete_log" + str(compliance_url.split('/')[-2]) + ".txt")
     #压缩文件，上传到云
-    os.chdir('/Users/maoyuanq/Desktop/daily')
+    os.chdir('C:/Users/Administrator/Desktop/daily')
     s3_function.zip_ya('compliance')
     #upload
-    s3_function.upload_to_aws_s3('compliance.zip','storageforccbrpa','compliance_daily'+today+'.zip')
+    s3_function.upload_to_aws_s3('compliance.zip','s3qingdao','compliance_daily'+today+'.zip')
 
 #test case 4.
 iter_flag = False
 regulation_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144957/21892/index'
-os.chdir('/Users/maoyuanq/Desktop/daily/')
-if os.path.exists('/Users/maoyuanq/Desktop/daily/regulation'):
-    shutil.rmtree('/Users/maoyuanq/Desktop/daily/regulation')
+os.chdir('C:/Users/Administrator/Desktop/daily/')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/regulation'):
+    shutil.rmtree('C:/Users/Administrator/Desktop/daily/regulation')
     os.mkdir('regulation')
 else:
     os.mkdir('regulation')
-os.chdir('/Users/maoyuanq/Desktop/daily/regulation')
+os.chdir('C:/Users/Administrator/Desktop/daily/regulation')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(regulation_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(regulation_url.split('/')[-2]) + ".txt", 'r') as f:
@@ -426,22 +427,22 @@ if message == '今日无增量':
 else:
     os.remove("complete_log" + str(regulation_url.split('/')[-2]) + ".txt")
     #压缩文件，上传到云
-    os.chdir('/Users/maoyuanq/Desktop/daily')
+    os.chdir('C:/Users/Administrator/Desktop/daily')
     s3_function.zip_ya('regulation')
     #upload
-    s3_function.upload_to_aws_s3('regulation.zip','storageforccbrpa','regulation_daily'+today+'.zip')
+    s3_function.upload_to_aws_s3('regulation.zip','s3qingdao','regulation_daily'+today+'.zip')
 
 
 #test case 5.
 iter_flag = False
 other_url = 'http://www.pbc.gov.cn/tiaofasi/144941/144959/21895/index'
-os.chdir('/Users/maoyuanq/Desktop/daily/')
-if os.path.exists('/Users/maoyuanq/Desktop/daily/others'):
-    shutil.rmtree('/Users/maoyuanq/Desktop/daily/others')
+os.chdir('C:/Users/Administrator/Desktop/daily/')
+if os.path.exists('C:/Users/Administrator/Desktop/daily/others'):
+    shutil.rmtree('C:/Users/Administrator/Desktop/daily/others')
     os.mkdir('others')
 else:
     os.mkdir('others')
-os.chdir('/Users/maoyuanq/Desktop/daily/others')
+os.chdir('C:/Users/Administrator/Desktop/daily/others')
 while iter_flag == False:
     if os.path.exists("complete_log" + str(other_url.split('/')[-2]) + ".txt"):  # 如果是中途断点
         with open("complete_log" + str(other_url.split('/')[-2]) + ".txt", 'r') as f:
@@ -455,10 +456,9 @@ if message == '今日无增量':
 else:
     os.remove("complete_log" + str(other_url.split('/')[-2]) + ".txt")
     #压缩文件，上传到云
-    os.chdir('/Users/maoyuanq/Desktop/daily')
+    os.chdir('C:/Users/Administrator/Desktop/daily')
     s3_function.zip_ya('others')
     #upload
-    s3_function.upload_to_aws_s3('others.zip','storageforccbrpa','others_daily'+today+'.zip')
+    s3_function.upload_to_aws_s3('others.zip','s3qingdao','others_daily'+today+'.zip')
 
 
-# print(remove('/Users/maoyuanq/Desktop/规范性文件'))

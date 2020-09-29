@@ -3,10 +3,10 @@ from botocore.exceptions import NoCredentialsError
 import zipfile
 import os
 
-BUCKET = 'storageforccbrpa'
+BUCKET = 's3qingdao'
 def upload_to_aws_s3(local_file, bucket_name, s3_file):
     #initiate s3
-    s3 = boto3.client('s3',region_name = 'us-east-2')
+    s3 = boto3.client('s3',region_name = 'cn-northwest-1')
     try:
         s3.upload_file(local_file,bucket_name,s3_file)
         print("upload success!")
@@ -17,7 +17,7 @@ def upload_to_aws_s3(local_file, bucket_name, s3_file):
 
 def get_file_by_key(file_name):
     bucket = BUCKET
-    s3 = boto3.client('s3', region_name='us-east-2')
+    s3 = boto3.client('s3', region_name='cn-northwest-1')
     s3.download_file(bucket,file_name,file_name)
 
 def zip_ya(start_dir):
