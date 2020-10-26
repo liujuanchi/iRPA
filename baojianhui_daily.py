@@ -9,7 +9,7 @@ import shutil
 
 def web_init(web_url):
     t.url(web_url)
-    t.wait(3)
+    t.wait(30)
 
 
 def main_operation(url, mode = 'txt'):
@@ -29,14 +29,14 @@ def main_operation(url, mode = 'txt'):
         start_j = 1
     #常规操作
     for i in range(1, list_count + 1):
-        t.wait(1)
+        t.wait(5)
         if i < int(start_i):
             continue
         item_count = t.count(
             element_identifier='//div[@class = "list caidan-right-list"][' + str(
                 i) + ']//div[@class = "panel-row ng-scope"]')  # 取出每个list里的具体法规有几条
         print('当前是list {}, 里面的元素有 {} 个'.format(str(i), str(item_count)))
-        t.wait(1)
+        t.wait(5)
         for j in range(1, item_count + 1):
             if j < int(start_j):
                 continue
@@ -134,7 +134,7 @@ def main_operation(url, mode = 'txt'):
                     curr_clock += 5
                     if curr_clock > MAX_WAIT:
                         break
-                t.wait(2)
+                t.wait(5)
                 os.rename(doc_name, item_title + '_' + time_suffix + '.doc')
             elif mode == 'pdf':
                 t.click(element_identifier='//div[@class = "list caidan-right-list"][' + str(
@@ -148,7 +148,7 @@ def main_operation(url, mode = 'txt'):
                     curr_clock += 5
                     if curr_clock > MAX_WAIT:
                         break
-                t.wait(2)
+                t.wait(5)
                 os.rename(pdf_name, item_title + '_' + time_suffix + '.pdf')
             else:
                 print('unknown format..')
@@ -158,7 +158,7 @@ def main_operation(url, mode = 'txt'):
             t.url(
                 url + str(
                     curr_page))
-            t.wait(2)
+            t.wait(5)
             with open('baojianhui_log.txt','w') as f:
                 f.write(str(curr_page) + ',' + str(i) + ',' + str(j))
         with open('baojianhui_log.txt','w') as f:
@@ -181,7 +181,7 @@ def main(url, mode = 'txt'):
             return True, '今日无增量'
         print('click once')
         t.click(element_identifier='//a[@ng-click = "pager.next()"]') #翻页
-        t.wait(1)
+        t.wait(5)
         curr_page = int(t.read(element_identifier='//div[@class = "ng-binding"][last()]').split('/')[0])
         with open('baojianhui_log.txt', 'w') as f:
             f.write(str(curr_page) + ',' + str(1) + ',' + str(1)) #翻页之后，index重置；i更新；
@@ -197,63 +197,86 @@ def search(path):
         return True
     else:
         return False
+#若中间有任何差错，直接上传当日的日志
+try:
+    #转工作路径到桌面
+    os.chdir('C:/Users/Administrator/Desktop')
+    #如果存在保监会规章doc，就移除
+    if os.path.exists('C:/Users/Administrator/Desktop/baojian_guizhang'):
+        shutil.rmtree('C:/Users/Administrator/Desktop/baojian_guizhang')
+    #创建doc
+    os.mkdir('baojian_guizhang')
+    #改变路径
+    os.chdir('C:/Users/Administrator/Desktop/baojian_guizhang')
+    guizhang_flag = False
+    guizhang_url = 'http://www.cbirc.gov.cn/cn/view/pages/ItemList.html?itemPId=923&itemId=928&itemUrl=ItemListRightList.html&itemName=规章及规范性文件&itemsubPId=926#'
+    if os.path.exists('baojianhui_log.txt'):
+        os.remove('baojianhui_log.txt') #删除之前的log
+    while not guizhang_flag:
+        try:
+            t.init()
+            guizhang_flag = main(url=guizhang_url, mode = 'txt')
+            t.close()
+        except Exception as e:
+            traceback.print_exc()
+            # print("i am wrong")
+            t.close()
+    if os.path.exists('baojianhui_log.txt'):
+        os.remove('baojianhui_log.txt') #运行成功之后删除log
+    os.chdir('C:/Users/Administrator/Desktop')
+    if search('C:/Users/Administrator/Desktop/baojian_guizhang'):
+        s3_function.zip_ya('baojian_guizhang')
+        s3_function.upload_to_aws_s3('baojian_guizhang.zip','s3qingdao','baojian_guizhang_history'+str((datetime.datetime.today()).date())+'.zip')
+        os.remove('baojian_guizhang.zip')
+    else:
+        print('文件夹空的')
+except:
+    #创建错误日志
+    with open('baojian_guizhang_history'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+        f.write("今天保监会规章日增获取失败")
+    s3_function.upload_to_aws_s3('baojian_guizhang_history'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
+                                 'baojian_guizhang_history'+str((datetime.datetime.today()).date())+'.txt')
+    os.remove('baojian_guizhang_history'+str((datetime.datetime.today()).date())+'.txt')
 
-os.chdir('C:/Users/Administrator/Desktop')
-if os.path.exists('C:/Users/Administrator/Desktop/baojian_guizhang'):
-    shutil.rmtree('C:/Users/Administrator/Desktop/baojian_guizhang')
-os.mkdir('baojian_guizhang')
-os.chdir('C:/Users/Administrator/Desktop/baojian_guizhang')
-guizhang_flag = False
-guizhang_url = 'http://www.cbirc.gov.cn/cn/view/pages/ItemList.html?itemPId=923&itemId=928&itemUrl=ItemListRightList.html&itemName=规章及规范性文件&itemsubPId=926#'
-if os.path.exists('baojianhui_log.txt'):
-    os.remove('baojianhui_log.txt') #删除之前的log
-while not guizhang_flag:
-    try:
-        t.init()
-        guizhang_flag = main(url=guizhang_url, mode = 'txt')
-        t.close()
-    except Exception as e:
-        traceback.print_exc()
-        # print("i am wrong")
-        t.close()
-if os.path.exists('baojianhui_log.txt'):
-    os.remove('baojianhui_log.txt') #运行成功之后删除log
-os.chdir('C:/Users/Administrator/Desktop')
-if search('C:/Users/Administrator/Desktop/baojian_guizhang'):
-    s3_function.zip_ya('baojian_guizhang')
-    s3_function.upload_to_aws_s3('baojian_guizhang.zip','s3qingdao','baojian_guizhang_history'+str((datetime.datetime.today()).date())+'.zip')
-    os.remove('baojian_guizhang.zip')
-else:
-    print('文件夹空的')
 
 
-os.chdir('C:/Users/Administrator/Desktop')
-if os.path.exists('C:/Users/Administrator/Desktop/baojian_falv'):
-    shutil.rmtree('C:/Users/Administrator/Desktop/baojian_falv')
-os.mkdir('baojian_falv')
-os.chdir('C:/Users/Administrator/Desktop/baojian_falv')
-falv_flag = False
-falv_url = 'http://www.cbirc.gov.cn/cn/view/pages/ItemList.html?itemPId=923&itemId=927&itemUrl=ItemListRightList.html&itemName=法律法规&itemsubPId=926#'
-if os.path.exists('baojianhui_log.txt'):
-    os.remove('baojianhui_log.txt') #删除之前的log
-while not falv_flag:
-    try:
-        t.init()
-        falv_flag = main(url=falv_url, mode = 'txt')
-        t.close()
-    except Exception as e:
-        traceback.print_exc()
-        # print("i am wrong")
-        t.close()
-if os.path.exists('baojianhui_log.txt'):
-    os.remove('baojianhui_log.txt') #运行成功之后删除log
-os.chdir('C:/Users/Administrator/Desktop')
-if search('C:/Users/Administrator/Desktop/baojian_falv'):
-    s3_function.zip_ya('baojian_falv')
-    s3_function.upload_to_aws_s3('baojian_falv.zip','s3qingdao','baojian_falv_history'+str((datetime.datetime.today()).date())+'.zip')
-    os.remove('baojian_falv.zip')
-else:
-    print('文件夹空的')
+#若中间有任何差错，直接上传当日的日志
+try:
+    os.chdir('C:/Users/Administrator/Desktop')
+    if os.path.exists('C:/Users/Administrator/Desktop/baojian_falv'):
+        shutil.rmtree('C:/Users/Administrator/Desktop/baojian_falv')
+    os.mkdir('baojian_falv')
+    os.chdir('C:/Users/Administrator/Desktop/baojian_falv')
+    falv_flag = False
+    falv_url = 'http://www.cbirc.gov.cn/cn/view/pages/ItemList.html?itemPId=923&itemId=927&itemUrl=ItemListRightList.html&itemName=法律法规&itemsubPId=926#'
+    if os.path.exists('baojianhui_log.txt'):
+        os.remove('baojianhui_log.txt') #删除之前的log
+    while not falv_flag:
+        try:
+            t.init()
+            falv_flag = main(url=falv_url, mode = 'txt')
+            t.close()
+        except Exception as e:
+            traceback.print_exc()
+            # print("i am wrong")
+            t.close()
+    if os.path.exists('baojianhui_log.txt'):
+        os.remove('baojianhui_log.txt') #运行成功之后删除log
+    os.chdir('C:/Users/Administrator/Desktop')
+    if search('C:/Users/Administrator/Desktop/baojian_falv'):
+        s3_function.zip_ya('baojian_falv')
+        s3_function.upload_to_aws_s3('baojian_falv.zip','s3qingdao','baojian_falv_history'+str((datetime.datetime.today()).date())+'.zip')
+        os.remove('baojian_falv.zip')
+    else:
+        print('文件夹空的')
+except:
+    #创建错误日志
+    with open('baojian_falv_history'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+        f.write("今天保监会法律日增获取失败")
+    s3_function.upload_to_aws_s3('baojian_falv_history'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
+                                 'baojian_falv_history'+str((datetime.datetime.today()).date())+'.txt')
+    os.remove('baojian_falv_history'+str((datetime.datetime.today()).date())+'.txt')
+
 
 
 
