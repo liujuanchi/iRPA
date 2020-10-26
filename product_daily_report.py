@@ -26,6 +26,7 @@ try:
     #
     # pd.DataFrame({'今日在售银行理财产品':int(daily_on_sale),'本月累计发售银行理财产品':int(monthly_on_sale),'本月累计到期银行理财产品':int(monthly_expire)},index=[0]).to_csv(today+'product_daily.csv',index = False, encoding = 'utf-8')
     s3_function.upload_to_aws_s3(file_name,'s3qingdao',file_name)
+    os.remove(file_name)
     t.close()
 except:
     with open('FAIL_product_daily' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
