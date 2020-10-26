@@ -311,18 +311,18 @@ def history_data_daily(url_prefix, start_page=1):
 ## C:/Users/Administrator/Desktop/
 today = datetime.datetime.today()
 today = str(today.date())
-try:
-    os.chdir('C:/Users/Administrator/Desktop')
-    if os.path.exists('C:/Users/Administrator/Desktop/daily'):
-        shutil.rmtree('C:/Users/Administrator/Desktop/daily')
-    os.mkdir('daily')
-except:
-    #创建错误日志
-    with open('law_rpa'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
-        f.write("今日中国人民银行文件日增任务启动失败")
-    s3_function.upload_to_aws_s3('law_rpa'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'law_rpa'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('law_rpa'+str((datetime.datetime.today()).date())+'.txt')
+
+os.chdir('C:/Users/Administrator/Desktop')
+if os.path.exists('C:/Users/Administrator/Desktop/daily'):
+    shutil.rmtree('C:/Users/Administrator/Desktop/daily')
+os.mkdir('daily')
+# except:
+#     #创建错误日志
+#     with open('law_rpa'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+#         f.write("今日中国人民银行文件日增任务启动失败")
+#     s3_function.upload_to_aws_s3('law_rpa'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
+#                                  'law_rpa'+str((datetime.datetime.today()).date())+'.txt')
+#     os.remove('law_rpa'+str((datetime.datetime.today()).date())+'.txt')
 
 
 #test case 1.
