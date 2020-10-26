@@ -433,7 +433,7 @@ try:
             f.write("今日中国人民银行-规范性文件-无日增")
         s3_function.upload_to_aws_s3('compliance' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
                                      'compliance' + str((datetime.datetime.today()).date()) + '.txt')
-        os.remove('law' + str((datetime.datetime.today()).date()) + '.txt')
+        os.remove('compliance' + str((datetime.datetime.today()).date()) + '.txt')
     else:
         os.remove("complete_log" + str(compliance_url.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
@@ -447,7 +447,7 @@ except:
         f.write("今日中国人民银行-规范性文件-日增任务启动失败")
     s3_function.upload_to_aws_s3('compliance'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
                                  'compliance'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('law'+str((datetime.datetime.today()).date())+'.txt')
+    os.remove('compliance'+str((datetime.datetime.today()).date())+'.txt')
 
 #test case 4.
 try:
