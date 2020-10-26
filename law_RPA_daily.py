@@ -346,7 +346,11 @@ try:
             iter_flag,message = history_data_daily(law_url, 1)
 
     if message == '今日无增量':
-        pass
+        with open('law' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+            f.write("今日中国人民银行-国家法律-无日增")
+        s3_function.upload_to_aws_s3('law' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
+                                     'law' + str((datetime.datetime.today()).date()) + '.txt')
+        os.remove('law' + str((datetime.datetime.today()).date()) + '.txt')
     else:
         os.remove("complete_log" + str(law_url.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
@@ -384,7 +388,11 @@ try:
         else:  # 如果是首次运行
             iter_flag,message = history_data_daily(admin_law, 1)
     if message == '今日无增量':
-        pass
+        with open('admin' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+            f.write("今日中国人民银行-行政法规-无日增")
+        s3_function.upload_to_aws_s3('admin' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
+                                     'admin' + str((datetime.datetime.today()).date()) + '.txt')
+        os.remove('admin' + str((datetime.datetime.today()).date()) + '.txt')
     else:
         os.remove("complete_log" + str(admin_law.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
@@ -421,7 +429,11 @@ try:
         else:  # 如果是首次运行
             iter_flag,message = history_data_daily(compliance_url, 1)
     if message == '今日无增量':
-        pass
+        with open('compliance' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+            f.write("今日中国人民银行-规范性文件-无日增")
+        s3_function.upload_to_aws_s3('compliance' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
+                                     'compliance' + str((datetime.datetime.today()).date()) + '.txt')
+        os.remove('law' + str((datetime.datetime.today()).date()) + '.txt')
     else:
         os.remove("complete_log" + str(compliance_url.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
@@ -457,7 +469,11 @@ try:
         else:  # 如果是首次运行
             iter_flag,message = history_data_daily(regulation_url, 1)
     if message == '今日无增量':
-        pass
+        with open('regulation' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+            f.write("今日中国人民银行-部门规章-无日增")
+        s3_function.upload_to_aws_s3('regulation' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
+                                     'regulation' + str((datetime.datetime.today()).date()) + '.txt')
+        os.remove('regulation' + str((datetime.datetime.today()).date()) + '.txt')
     else:
         os.remove("complete_log" + str(regulation_url.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
@@ -472,6 +488,7 @@ except:
     s3_function.upload_to_aws_s3('regulation'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
                                  'regulation'+str((datetime.datetime.today()).date())+'.txt')
     os.remove('regulation'+str((datetime.datetime.today()).date())+'.txt')
+
 try:
     #test case 5.
     iter_flag = False
@@ -492,7 +509,11 @@ try:
         else:  # 如果是首次运行
             iter_flag,message = history_data_daily(other_url, 1)
     if message == '今日无增量':
-        pass
+        with open('others' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+            f.write("今日中国人民银行-其他文件-无日增")
+        s3_function.upload_to_aws_s3('others' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
+                                     'others' + str((datetime.datetime.today()).date()) + '.txt')
+        os.remove('others' + str((datetime.datetime.today()).date()) + '.txt')
     else:
         os.remove("complete_log" + str(other_url.split('/')[-2]) + ".txt")
         #压缩文件，上传到云

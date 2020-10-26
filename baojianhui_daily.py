@@ -230,6 +230,14 @@ try:
         os.remove('baojian_guizhang.zip')
     else:
         print('文件夹空的')
+        with open('baojian_guizhang_history' + str((datetime.datetime.today()).date()) + '.txt', 'w',
+                  encoding='utf-8') as f:
+            f.write("今天保监会规章无日增")
+        s3_function.upload_to_aws_s3('baojian_guizhang_history' + str((datetime.datetime.today()).date()) + '.txt',
+                                     's3qingdao',
+                                     'baojian_guizhang_history' + str((datetime.datetime.today()).date()) + '.txt')
+        os.remove('baojian_guizhang_history' + str((datetime.datetime.today()).date()) + '.txt')
+
 except:
     #创建错误日志
     with open('baojian_guizhang_history'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
@@ -269,6 +277,13 @@ try:
         os.remove('baojian_falv.zip')
     else:
         print('文件夹空的')
+        with open('baojian_falv_history' + str((datetime.datetime.today()).date()) + '.txt', 'w',
+                  encoding='utf-8') as f:
+            f.write("今天保监会法律无日增")
+        s3_function.upload_to_aws_s3('baojian_falv_history' + str((datetime.datetime.today()).date()) + '.txt',
+                                     's3qingdao',
+                                     'baojian_falv_history' + str((datetime.datetime.today()).date()) + '.txt')
+        os.remove('baojian_falv_history' + str((datetime.datetime.today()).date()) + '.txt')
 except:
     #创建错误日志
     with open('baojian_falv_history'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
