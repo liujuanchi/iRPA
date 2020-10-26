@@ -10,11 +10,11 @@ try:
     if flag == True:
         os.remove(file_name)
 except:
-    with open('rpa_daily' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+    with open('FAIL_rpa_daily' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
         f.write("今日理财日增数据拉取失败")
-    upload_s3.upload_to_aws_s3('rpa_daily' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
-                                 'rpa_daily' + str((datetime.datetime.today()).date()) + '.txt')
-    os.remove('rpa_daily' + str((datetime.datetime.today()).date()) + '.txt')
+    upload_s3.upload_to_aws_s3('FAIL_rpa_daily' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
+                                 'FAIL_rpa_daily' + str((datetime.datetime.today()).date()) + '.txt')
+    os.remove('FAIL_rpa_daily' + str((datetime.datetime.today()).date()) + '.txt')
 
 
 #file_name = rpa_history_data_without_date.main()

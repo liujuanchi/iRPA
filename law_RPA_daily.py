@@ -360,11 +360,11 @@ try:
         s3_function.upload_to_aws_s3('law.zip','s3qingdao','law_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('law'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_law'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-国家法律-日增任务启动失败")
-    s3_function.upload_to_aws_s3('law'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'law'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('law'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_law'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
+                                 'FAIL_law'+str((datetime.datetime.today()).date())+'.txt')
+    os.remove('FAIL_law'+str((datetime.datetime.today()).date())+'.txt')
 
 
 
@@ -402,11 +402,11 @@ try:
         s3_function.upload_to_aws_s3('admin.zip','s3qingdaos','admin_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('admin'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_admin'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-行政法规-日增任务启动失败")
-    s3_function.upload_to_aws_s3('admin'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'admin'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('admin'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_admin'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
+                                 'FAIL_admin'+str((datetime.datetime.today()).date())+'.txt')
+    os.remove('FAIL_admin'+str((datetime.datetime.today()).date())+'.txt')
 
 
 try:
@@ -443,11 +443,11 @@ try:
         s3_function.upload_to_aws_s3('compliance.zip','s3qingdao','compliance_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('compliance'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_compliance'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-规范性文件-日增任务启动失败")
-    s3_function.upload_to_aws_s3('compliance'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'compliance'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('compliance'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_compliance'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
+                                 'FAIL_compliance'+str((datetime.datetime.today()).date())+'.txt')
+    os.remove('FAIL_compliance'+str((datetime.datetime.today()).date())+'.txt')
 
 #test case 4.
 try:
@@ -483,11 +483,11 @@ try:
         s3_function.upload_to_aws_s3('regulation.zip','s3qingdao','regulation_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('regulation'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_regulation'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-部门规章-日增任务启动失败")
-    s3_function.upload_to_aws_s3('regulation'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'regulation'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('regulation'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_regulation'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
+                                 'FAIL_regulation'+str((datetime.datetime.today()).date())+'.txt')
+    os.remove('FAIL_regulation'+str((datetime.datetime.today()).date())+'.txt')
 
 try:
     #test case 5.
@@ -523,9 +523,9 @@ try:
         s3_function.upload_to_aws_s3('others.zip','s3qingdao','others_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('others'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_others'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-其他文件-日增任务启动失败")
-    s3_function.upload_to_aws_s3('others'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'others'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('others'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_others'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
+                                 'FAIL_others'+str((datetime.datetime.today()).date())+'.txt')
+    os.remove('FAIL_others'+str((datetime.datetime.today()).date())+'.txt')
 

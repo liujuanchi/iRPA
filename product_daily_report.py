@@ -28,9 +28,9 @@ try:
     s3_function.upload_to_aws_s3(file_name,'s3qingdao',file_name)
     t.close()
 except:
-    with open('product_daily' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+    with open('FAIL_product_daily' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
         f.write("今日理财产品日报任务启动失败")
-    s3_function.upload_to_aws_s3('product_daily' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
-                                 'product_daily' + str((datetime.datetime.today()).date()) + '.txt')
-    os.remove('product_daily' + str((datetime.datetime.today()).date()) + '.txt')
+    s3_function.upload_to_aws_s3('FAIL_product_daily' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
+                                 'FAIL_product_daily' + str((datetime.datetime.today()).date()) + '.txt')
+    os.remove('FAIL_product_daily' + str((datetime.datetime.today()).date()) + '.txt')
 
