@@ -44,7 +44,7 @@ def main_operation(url, mode = 'txt'):
                 i) + ']//div[@class = "panel-row ng-scope"][' + str(j) + ']//a')
             time_suffix = t.read(element_identifier='//div[@class = "list caidan-right-list"][' + str(
                 i) + ']//div[@class = "panel-row ng-scope"][' + str(j) + ']//span[@class = "date ng-binding"]')
-            if str(time_suffix) != '2020-08-28': #如果不是今日日期，直接return；str((datetime.datetime.today()).date())
+            if str(time_suffix) != str((datetime.datetime.today()).date()): #如果不是今日日期，直接return；str((datetime.datetime.today()).date())
                 print('今日增量已取完')
                 return True,'今日无增量'
             file_name = item_title + '_' + time_suffix + '.txt'

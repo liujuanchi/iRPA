@@ -256,6 +256,7 @@ def history_data_daily(url_prefix, start_page=1):
     curr_doc = 1
     today = datetime.datetime.today()
     today = str(today.date())
+
     try:
         t.init()
         t.wait(5)
@@ -283,8 +284,11 @@ def history_data_daily(url_prefix, start_page=1):
                 curr_doc = i
                 flag, time, content_url, file_name = read_content(page_num, url_prefix, i,today)
                 if flag == '' and time == '' and content_url == '' and file_name == '':
-                    t.close()
-                    return True, '今日无增量'
+                    if i == 1:
+                        t.close()
+                        return True, '今日无增量'
+                    else:
+                        return True, '今日增量'
                 if '.html' not in flag:
                     # 当直接跳到需要下载的文件的时候：需要提供 当前url，time后缀，目前的文件index
                     direct_download(content_url, time, i)
@@ -311,7 +315,6 @@ def history_data_daily(url_prefix, start_page=1):
 ## C:/Users/Administrator/Desktop/
 today = datetime.datetime.today()
 today = str(today.date())
-
 os.chdir('C:/Users/Administrator/Desktop')
 if os.path.exists('C:/Users/Administrator/Desktop/daily'):
     shutil.rmtree('C:/Users/Administrator/Desktop/daily')
@@ -346,25 +349,25 @@ try:
             iter_flag,message = history_data_daily(law_url, 1)
 
     if message == '今日无增量':
-        with open('law' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+        with open('law' + today+ '.txt', 'w', encoding='utf-8') as f:
             f.write("今日中国人民银行-国家法律-无日增")
-        s3_function.upload_to_aws_s3('law' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
-                                     'law' + str((datetime.datetime.today()).date()) + '.txt')
-        os.remove('law' + str((datetime.datetime.today()).date()) + '.txt')
+        s3_function.upload_to_aws_s3('law' + today + '.txt', 's3qingdao',
+                                     'law' + today+ '.txt')
+        os.remove('law' + today + '.txt')
     else:
-        os.remove("complete_log" + str(law_url.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
         os.chdir('C:/Users/Administrator/Desktop/daily')
+        print(' has daily increment')
         s3_function.zip_ya('law')
         #upload
         s3_function.upload_to_aws_s3('law.zip','s3qingdao','law_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('FAIL_law'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_law'+today+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-国家法律-日增任务启动失败")
-    s3_function.upload_to_aws_s3('FAIL_law'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'FAIL_law'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('FAIL_law'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_law'+today+'.txt', 's3qingdao',
+                                 'FAIL_law'+today+'.txt')
+    os.remove('FAIL_law'+today+'.txt')
 
 
 
@@ -388,25 +391,25 @@ try:
         else:  # 如果是首次运行
             iter_flag,message = history_data_daily(admin_law, 1)
     if message == '今日无增量':
-        with open('admin' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+        with open('admin' + today + '.txt', 'w', encoding='utf-8') as f:
             f.write("今日中国人民银行-行政法规-无日增")
-        s3_function.upload_to_aws_s3('admin' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
-                                     'admin' + str((datetime.datetime.today()).date()) + '.txt')
-        os.remove('admin' + str((datetime.datetime.today()).date()) + '.txt')
+        s3_function.upload_to_aws_s3('admin' +today + '.txt', 's3qingdao',
+                                     'admin' + today + '.txt')
+        os.remove('admin' + today + '.txt')
     else:
-        os.remove("complete_log" + str(admin_law.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
         os.chdir('C:/Users/Administrator/Desktop/daily')
+        print(' has daily increment')
         s3_function.zip_ya('admin')
         #upload
         s3_function.upload_to_aws_s3('admin.zip','s3qingdaos','admin_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('FAIL_admin'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_admin'+today+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-行政法规-日增任务启动失败")
-    s3_function.upload_to_aws_s3('FAIL_admin'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'FAIL_admin'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('FAIL_admin'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_admin'+today+'.txt', 's3qingdao',
+                                 'FAIL_admin'+today+'.txt')
+    os.remove('FAIL_admin'+today+'.txt')
 
 
 try:
@@ -429,25 +432,25 @@ try:
         else:  # 如果是首次运行
             iter_flag,message = history_data_daily(compliance_url, 1)
     if message == '今日无增量':
-        with open('compliance' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+        with open('compliance' + today + '.txt', 'w', encoding='utf-8') as f:
             f.write("今日中国人民银行-规范性文件-无日增")
-        s3_function.upload_to_aws_s3('compliance' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
-                                     'compliance' + str((datetime.datetime.today()).date()) + '.txt')
-        os.remove('compliance' + str((datetime.datetime.today()).date()) + '.txt')
+        s3_function.upload_to_aws_s3('compliance' + today+ '.txt', 's3qingdao',
+                                     'compliance' + today + '.txt')
+        os.remove('compliance' + today + '.txt')
     else:
-        os.remove("complete_log" + str(compliance_url.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
         os.chdir('C:/Users/Administrator/Desktop/daily')
+        print(' has daily increment')
         s3_function.zip_ya('compliance')
         #upload
         s3_function.upload_to_aws_s3('compliance.zip','s3qingdao','compliance_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('FAIL_compliance'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_compliance'+today+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-规范性文件-日增任务启动失败")
-    s3_function.upload_to_aws_s3('FAIL_compliance'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'FAIL_compliance'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('FAIL_compliance'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_compliance'+today+'.txt', 's3qingdao',
+                                 'FAIL_compliance'+today+'.txt')
+    os.remove('FAIL_compliance'+today+'.txt')
 
 #test case 4.
 try:
@@ -469,25 +472,25 @@ try:
         else:  # 如果是首次运行
             iter_flag,message = history_data_daily(regulation_url, 1)
     if message == '今日无增量':
-        with open('regulation' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+        with open('regulation' + today + '.txt', 'w', encoding='utf-8') as f:
             f.write("今日中国人民银行-部门规章-无日增")
-        s3_function.upload_to_aws_s3('regulation' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
-                                     'regulation' + str((datetime.datetime.today()).date()) + '.txt')
-        os.remove('regulation' + str((datetime.datetime.today()).date()) + '.txt')
+        s3_function.upload_to_aws_s3('regulation' + today+ '.txt', 's3qingdao',
+                                     'regulation' + today+ '.txt')
+        os.remove('regulation' + today + '.txt')
     else:
-        os.remove("complete_log" + str(regulation_url.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
         os.chdir('C:/Users/Administrator/Desktop/daily')
+        print(' has daily increment')
         s3_function.zip_ya('regulation')
         #upload
         s3_function.upload_to_aws_s3('regulation.zip','s3qingdao','regulation_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('FAIL_regulation'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_regulation'+today+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-部门规章-日增任务启动失败")
-    s3_function.upload_to_aws_s3('FAIL_regulation'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'FAIL_regulation'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('FAIL_regulation'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_regulation'+today+'.txt', 's3qingdao',
+                                 'FAIL_regulation'+today+'.txt')
+    os.remove('FAIL_regulation'+today+'.txt')
 
 try:
     #test case 5.
@@ -509,23 +512,23 @@ try:
         else:  # 如果是首次运行
             iter_flag,message = history_data_daily(other_url, 1)
     if message == '今日无增量':
-        with open('others' + str((datetime.datetime.today()).date()) + '.txt', 'w', encoding='utf-8') as f:
+        with open('others' + today + '.txt', 'w', encoding='utf-8') as f:
             f.write("今日中国人民银行-其他文件-无日增")
-        s3_function.upload_to_aws_s3('others' + str((datetime.datetime.today()).date()) + '.txt', 's3qingdao',
-                                     'others' + str((datetime.datetime.today()).date()) + '.txt')
-        os.remove('others' + str((datetime.datetime.today()).date()) + '.txt')
+        s3_function.upload_to_aws_s3('others' + today+ '.txt', 's3qingdao',
+                                     'others' + today + '.txt')
+        os.remove('others' + today + '.txt')
     else:
-        os.remove("complete_log" + str(other_url.split('/')[-2]) + ".txt")
         #压缩文件，上传到云
         os.chdir('C:/Users/Administrator/Desktop/daily')
+        print(' has daily increment')
         s3_function.zip_ya('others')
         #upload
         s3_function.upload_to_aws_s3('others.zip','s3qingdao','others_daily'+today+'.zip')
 except:
     #创建错误日志
-    with open('FAIL_others'+str((datetime.datetime.today()).date())+'.txt','w', encoding='utf-8') as f:
+    with open('FAIL_others'+today+'.txt','w', encoding='utf-8') as f:
         f.write("今日中国人民银行-其他文件-日增任务启动失败")
-    s3_function.upload_to_aws_s3('FAIL_others'+str((datetime.datetime.today()).date())+'.txt', 's3qingdao',
-                                 'FAIL_others'+str((datetime.datetime.today()).date())+'.txt')
-    os.remove('FAIL_others'+str((datetime.datetime.today()).date())+'.txt')
+    s3_function.upload_to_aws_s3('FAIL_others'+today+'.txt', 's3qingdao',
+                                 'FAIL_others'+today+'.txt')
+    os.remove('FAIL_others'+today+'.txt')
 
